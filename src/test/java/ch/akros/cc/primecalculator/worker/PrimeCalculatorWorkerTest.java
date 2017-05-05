@@ -16,28 +16,28 @@ import ch.qos.logback.core.Appender;
 @RunWith(MockitoJUnitRunner.class)
 public class PrimeCalculatorWorkerTest {
 
+   private static final Logger     LOG = LoggerFactory.getLogger(PrimeCalculatorWorkerTest.class);
+
    @Mock
    private Appender<ILoggingEvent> mockAppender;
-
-   private static Logger           logger = LoggerFactory.getLogger(PrimeCalculatorWorkerTest.class);
 
    @Before
    public void setUp() {
 
-      LoggingTestUtil.setupLoggingMock(logger, mockAppender);
+      LoggingTestUtil.setupLoggingMock(LOG, mockAppender);
    }
 
    @Test
    public void PrimeCalculatorWorker_shouldLogThreePrimeNumbers() throws InterruptedException {
 
-      Runnable r = new PrimeCalculatorWorker(0, 3);
-      Thread t = new Thread(r);
+      final Runnable r = new PrimeCalculatorWorker(0, 3);
+      final Thread t = new Thread(r);
       t.start();
       t.join();
 
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "0 is eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "1 is eine keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "2 is eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "3 is eine Primzahl");
+      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "0 ist eine Primzahl");
+      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "1 ist keine Primzahl");
+      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "2 ist eine Primzahl");
+      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "3 ist eine Primzahl");
    }
 }

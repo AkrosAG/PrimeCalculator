@@ -15,10 +15,10 @@ public class PrimeCalculatorWorker implements Runnable {
 
    private static final Logger LOG = LoggerFactory.getLogger(PrimeCalculatorWorker.class);
 
-   private long                begin;
-   private long                end;
+   private final long          begin;
+   private final long          end;
 
-   public PrimeCalculatorWorker(long begin, long end) {
+   public PrimeCalculatorWorker(final long begin, final long end) {
       this.begin = begin;
       this.end = end;
    }
@@ -35,9 +35,9 @@ public class PrimeCalculatorWorker implements Runnable {
       while (!Thread.currentThread().isInterrupted()) {
          boolean isPrime = PrimeCalculator.isPrime(numberToCheck);
          if (isPrime) {
-            LOG.info("{} is eine Primzahl", numberToCheck);
+            LOG.info("{} ist eine Primzahl", numberToCheck);
          } else {
-            LOG.info("{} is eine keine Primzahl", numberToCheck);
+            LOG.info("{} ist keine Primzahl", numberToCheck);
          }
          numberToCheck++;
          if (numberToCheck > end) {
