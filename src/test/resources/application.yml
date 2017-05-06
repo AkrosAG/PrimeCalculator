@@ -1,0 +1,4 @@
+primecalc:
+  begin: 0
+  end: 10
+  endpoint: http://localhost:666/calc

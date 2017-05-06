@@ -35,9 +35,9 @@ public class PrimeCalculatorRunnerTest {
    private PrimeCalculatorConfigurationProperties properties;
 
    @Test
-   public void PrimeCalculatorRunner_calculateZeroToTen_shouldProduceLog() throws InterruptedException {
+   public void PrimeCalculatorRunner_calculateZeroToTen_shouldSendCalculationsToEndpoint() throws InterruptedException {
 
-      server.expect(ExpectedCount.times(10), requestTo("http://localhost:666/calc"))
+      server.expect(ExpectedCount.max(5), requestTo("http://localhost:666/calc"))
             .andRespond(withSuccess("true", MediaType.APPLICATION_JSON));
 
       final PrimeCalculatorRunner runner = applicationContext.getBean(PrimeCalculatorRunner.class);
