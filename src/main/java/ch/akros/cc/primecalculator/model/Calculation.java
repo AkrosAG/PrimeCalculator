@@ -5,6 +5,9 @@ package ch.akros.cc.primecalculator.model;
 
 import java.util.UUID;
 
+/**
+ * Model to hold the calculation result.
+ */
 public class Calculation {
 
    private Long   id;

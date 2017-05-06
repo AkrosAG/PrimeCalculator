@@ -14,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import oshi.SystemInfo;
 import oshi.hardware.HardwareAbstractionLayer;
 
+/**
+ * Class for Configuration of Spring-Beans
+ */
 @Configuration
 public class AppConfig {
 

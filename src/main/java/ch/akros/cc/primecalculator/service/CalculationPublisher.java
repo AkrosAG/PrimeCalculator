@@ -19,6 +19,9 @@ import org.springframework.web.client.RestTemplate;
 import ch.akros.cc.primecalculator.config.PrimeCalculatorConfigurationProperties;
 import ch.akros.cc.primecalculator.model.Calculation;
 
+/**
+ * Service to publish the prime numbers to the remote Repository.
+ */
 @Service
 public class CalculationPublisher {
 

@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Read application specific properties.
+ */
 @Component
 @ConfigurationProperties(prefix = "primecalc")
 public class PrimeCalculatorConfigurationProperties {

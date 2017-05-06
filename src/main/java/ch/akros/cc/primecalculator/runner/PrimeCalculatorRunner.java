@@ -23,6 +23,9 @@ import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.util.FormatUtil;
 
+/**
+ * Runner Thread to execute a calculation thread each 1000 numbers.
+ */
 @Component
 @Scope("prototype")
 public class PrimeCalculatorRunner implements Runnable {

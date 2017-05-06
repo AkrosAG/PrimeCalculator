@@ -12,6 +12,9 @@ import org.springframework.context.ApplicationContext;
 import ch.akros.cc.primecalculator.config.PrimeCalculatorConfigurationProperties;
 import ch.akros.cc.primecalculator.runner.PrimeCalculatorRunner;
 
+/**
+ * Main-Class to start the application.
+ */
 @SpringBootApplication
 public class PrimeCalculatorMain implements CommandLineRunner {
 
