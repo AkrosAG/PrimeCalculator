@@ -13,17 +13,20 @@ import org.springframework.stereotype.Component;
 public class PrimeCalculatorConfigurationProperties {
 
    @NotNull
-   private long begin;
+   private long   begin;
 
    @NotNull
-   private long end;
+   private long   end;
+
+   @NotNull
+   private String endpoint;
 
    public long getBegin() {
 
       return begin;
    }
 
-   public void setBegin(long begin) {
+   public void setBegin(final long begin) {
 
       this.begin = begin;
    }
@@ -33,9 +36,19 @@ public class PrimeCalculatorConfigurationProperties {
       return end;
    }
 
-   public void setEnd(long end) {
+   public void setEnd(final long end) {
 
       this.end = end;
+   }
+
+   public String getEndpoint() {
+
+      return endpoint;
+   }
+
+   public void setEndpoint(final String endpoint) {
+
+      this.endpoint = endpoint;
    }
 
 }

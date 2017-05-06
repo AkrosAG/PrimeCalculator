@@ -6,23 +6,20 @@ package ch.akros.cc.primecalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
 import ch.akros.cc.primecalculator.config.PrimeCalculatorConfigurationProperties;
 import ch.akros.cc.primecalculator.runner.PrimeCalculatorRunner;
 
 @SpringBootApplication
-@EnableAutoConfiguration
 public class PrimeCalculatorMain implements CommandLineRunner {
 
+   @Autowired
    private PrimeCalculatorConfigurationProperties properties;
 
    @Autowired
-   public void setPrimeCalculatorConfigurationProperties(final PrimeCalculatorConfigurationProperties properties) {
-
-      this.properties = properties;
-   }
+   private ApplicationContext                     applicationContext;
 
    /*
     * (non-Javadoc)
@@ -32,7 +29,10 @@ public class PrimeCalculatorMain implements CommandLineRunner {
    @Override
    public void run(final String... arg0) throws Exception {
 
-      final Thread t = new Thread(new PrimeCalculatorRunner(properties.getBegin(), properties.getEnd()));
+      final PrimeCalculatorRunner runner = applicationContext.getBean(PrimeCalculatorRunner.class);
+      runner.setNumberRange(properties.getBegin(), properties.getEnd());
+
+      final Thread t = new Thread(runner);
       t.start();
       t.join();
    }
@@ -41,4 +41,5 @@ public class PrimeCalculatorMain implements CommandLineRunner {
 
       SpringApplication.run(PrimeCalculatorMain.class, args);
    }
+
 }

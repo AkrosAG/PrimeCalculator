@@ -1,58 +1,50 @@
 package ch.akros.cc.primecalculator.runner;
 
-import org.junit.Before;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.web.client.MockRestServiceServer;
 
-import ch.akros.cc.primecalculator.log.LoggingTestUtil;
-import ch.akros.cc.primecalculator.worker.PrimeCalculatorWorkerTest;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.Appender;
+import ch.akros.cc.primecalculator.config.AppConfig;
+import ch.akros.cc.primecalculator.config.PrimeCalculatorConfigurationProperties;
+import ch.akros.cc.primecalculator.service.CalculationPublisher;
+import ch.akros.cc.primecalculator.worker.PrimeCalculatorWorker;
 
-@RunWith(MockitoJUnitRunner.class)
+@RestClientTest()
+@ContextConfiguration(classes = { AppConfig.class, PrimeCalculatorConfigurationProperties.class,
+      CalculationPublisher.class, PrimeCalculatorRunner.class, PrimeCalculatorWorker.class })
+@RunWith(SpringRunner.class)
 public class PrimeCalculatorRunnerTest {
 
-   private static final Logger     LOG = LoggerFactory.getLogger(PrimeCalculatorWorkerTest.class);
+   @Autowired
+   private MockRestServiceServer                  server;
 
-   @Mock
-   private Appender<ILoggingEvent> mockAppender;
+   @Autowired
+   private ApplicationContext                     applicationContext;
 
-   @Before
-   public void setUp() {
-
-      LoggingTestUtil.setupLoggingMock(LOG, mockAppender);
-   }
+   @Autowired
+   private PrimeCalculatorConfigurationProperties properties;
 
    @Test
    public void PrimeCalculatorRunner_calculateZeroToTen_shouldProduceLog() throws InterruptedException {
 
-      final Thread t = new Thread(new PrimeCalculatorRunner(0, 10));
+      server.expect(ExpectedCount.times(10), requestTo("http://localhost:666/calc"))
+            .andRespond(withSuccess("true", MediaType.APPLICATION_JSON));
+
+      final PrimeCalculatorRunner runner = applicationContext.getBean(PrimeCalculatorRunner.class);
+      runner.setNumberRange(properties.getBegin(), properties.getEnd());
+
+      final Thread t = new Thread(runner);
       t.start();
       t.join();
-
-      checkLog();
-   }
-
-   private void checkLog() {
-
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "0 ist eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "1 ist keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "2 ist eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "3 ist eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "4 ist keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "5 ist eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "6 ist keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "7 ist eine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "8 ist keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "9 ist keine Primzahl");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.INFO, "10 ist keine Primzahl");
-
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.DEBUG, "Memory:");
-      LoggingTestUtil.verifyLogAppendedAtLevel(mockAppender, Level.DEBUG, "CPU load:");
    }
 }
