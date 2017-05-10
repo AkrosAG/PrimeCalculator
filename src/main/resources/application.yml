@@ -5,8 +5,8 @@ logging:
     root: INFO
     ch.akros.cc.primecalculator: DEBUG
   pattern:
-    file=%d: %p [%c{8}] - %m%n
-    console=%d: %p [%c{8}] - %m%n
+    file: '%d: %p [%c{8}] - %m%n'
+    console: '%d: %p [%c{8}] - %m%n'
 
 primecalc:
   begin: 2147483647
